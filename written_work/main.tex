@@ -1,0 +1,76 @@
+\documentclass[12pt]{fphw}
+
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{mathpazo} % Use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+
+\usepackage{booktabs} % Required for better horizontal rules in tables
+
+\usepackage{listings} % Required for insertion of code
+
+\usepackage{enumerate} % To modify the enumerate environment
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\title{Logic Coursework 2024/25: Written Work}
+\author{Huseyin Emre Ozden}
+\date{March 25th, 2025}
+\institute{Durham University}
+\class{Computational Thinking}
+\professor{Prof. Barnaby Martin}
+
+\begin{document}
+
+\maketitle
+
+\section*{Question 1}
+
+\begin{problem}
+  Answer the following questions about complete sets of logical connectives, in each case justifying your answer. \\
+  (i) Show $\{\neg, \to \}$ is a complete set of connectives. \\
+  (ii) Show $\{\to, 0\}$ is a complete set of connectives (where $0$ is the constant false). \\
+  (iii) Is $\{ \text{NAND}, \wedge\}$ a complete set of connectives? \\
+  (iv) Is $\{\wedge, \vee\}$ a complete set of connectives?
+\end{problem}
+
+\section*{Question 2}
+
+\begin{problem}
+  Convert $(((p \to q) \to r) \to (s \to t))$ to \\
+  (i) Conjunctive Normal Form (CNF) \\
+  (ii) Disjunctive Normal Form (DNF)
+\end{problem}
+
+\section*{Question 3}
+
+\begin{problem}
+  What is the purpose of Tseitin's Algorithm? Apply Tseitin's Algorithm to turn the propositional formula $(((x_1 \wedge x_2 \wedge x_3) \to (y_1 \wedge y_2 \wedge y_3)) \vee z)$ to CNF.
+\end{problem}
+
+\section*{Question 4}
+
+\begin{problem}
+  State with justification if each of the following sentences of predicate logic is logically valid. \\
+  (i) $(\forall x \exists y \forall z \ E(x,y) \wedge E(y,z)) \to (\forall x \forall z \exists y \ E(x,y) \wedge E(y,z))$ \\
+  (ii) $(\forall x \exists y \exists u \forall v \ E(x,y) \wedge E(u,v)) \to (\exists u \forall v \forall x \exists y \ E(x,y) \wedge E(u,v))$ \\
+  (iii) $(\forall x \exists y \forall z \ R(x,y,z)) \to (\exists x \forall y \exists z \ R(x,y,z))$ \\
+  (iv) $((\forall x \forall y \exists z (E(x,y) \wedge E(y,z))) \to (\forall x \forall y \forall z (E(x,y) \vee E(y,z))))$
+\end{problem}
+
+\section*{Question 5}
+
+\begin{problem}
+  Evaluate the given sentence on the respective relation $E$ over domain $\{0,1,2\}$ \\
+  (i) $\forall x \forall y \forall z \exists w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ \\
+  (ii) $\exists x \forall y \forall z \exists w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ \\
+  (iii) $\forall y \exists x \forall z \exists w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ \\
+  (iv) $\exists x \exists y \exists z \forall w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ \\
+  (v) $\forall x_1 \exists x_2 \forall y_1 \exists y_2 \forall z_1 \exists z_2 \forall z \exists y \ E(x_1, x_2) \wedge E(x_2, w) \wedge E(y_1, y_2) \wedge E(y_2, w) \wedge E(z_1, z_2) \wedge E(z_2, w) \wedge E(z,w)$ \\
+  (vi) $\forall x_1 \exists x_2 \forall y_1 \exists y_2 \forall z_1 \forall z \exists z_2 \exists y \ E(x_1, x_2) \wedge E(x_2, w) \wedge E(y_1, y_2) \wedge E(y_2, w) \wedge E(z_1, z_2) \wedge E(z_2, w) \wedge E(z,w)$
+\end{problem}
+
+\end{document}
