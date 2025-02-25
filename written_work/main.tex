@@ -37,6 +37,29 @@
   (iv) Is $\{\wedge, \vee\}$ a complete set of connectives?
 \end{problem}
 
+\subsection*{Answer}
+
+In order to determine whether the sets are complete, I will be showing whether $\wedge, \vee$ and $\neg$ can be expressed using the connectives in the set, in which case any logical expression can be written in CNF or DNF, meaning that it's a complete set.
+
+\begin{proof}[Proof for part (i)] $ $ \newline
+  Can $\vee$ be expressed using $\{\neg, \to \}$? \\ 
+  Yes: $\neg p \to q \equiv \neg(\neg p) \vee q \equiv p \vee q$ \\ 
+  Can $\wedge$ be expressed using $\{\neg, to \}$? \\ 
+  Yes: $\neg(p \to \neg q) \equiv \neg (\neg p \vee \neg q) \equiv p \wedge q$ \\
+  Since $\neg$ is already in our set of logical connectives, we can then conclude that $\{\neg, \to \}$ is a complete set of logical connectives, as any logical expression can be expressed in CNF/DNF using the connectives within the set.
+\end{proof}
+
+
+\begin{proof}[Proof for part (ii)] $ $ \newline
+  Can $\neg$ be expressed using $\{\to, 0\}$? \\
+  Yes: $p \to 0 \equiv \neg p \vee 0 \equiv \neg p$ \\ 
+  Can $\vee$ be expressed using $\{\to, 0\}$? \\ 
+  Yes: $(p \to 0) \to q \equiv \neg (p \to 0) \vee q \equiv \neg (\neg p ) \vee q \equiv p \vee q$ \\ 
+  Can $\wedge$ be expressed using $\{\to, 0\}$? \\ 
+  Yes: $(p \to (q \to 0)) \to 0 \equiv (p \to (\neg q \vee 0)) \to 0 \equiv (p \to \neg q) \to 0 \equiv (\neg p \vee \neg q) \to 0 \equiv \neg(\neg p \vee \neg q) \vee 0 \equiv p \wedge q$ \\ 
+  Therefore $\{\to, 0\}$ is a complete set of logical connectives
+\end{proof}
+
 \section*{Question 2}
 
 \begin{problem}
