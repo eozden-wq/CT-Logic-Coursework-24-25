@@ -60,6 +60,18 @@ In order to determine whether the sets are complete, I will be showing whether $
   Therefore $\{\to, 0\}$ is a complete set of logical connectives
 \end{proof}
 
+\begin{proof}[Proof for part (iii)] $ $ \newline
+ To denote NAND, I will use the symbol: $\barwedge$ \\ 
+ Can $\neg$ be expressed using $\{\barwedge, \wedge\}$? \\ 
+ Yes: $p \barwedge p \equiv \neg(p \wedge p) \equiv \neg p$ \\ 
+ Can $\vee$ be expressed using $\{\barwedge, \wedge\}$? \\ 
+ Yes: $(p \barwedge p) \barwedge (q \barwedge q) \equiv \neg p \barwedge \neg q \equiv \neg(\neg p \wedge \neg q) \equiv p \vee q$ \\ 
+ $\wedge$ is already in the set of logical connectives, therefore the set of logical connectives $\{\text{NAND}, \wedge\}$ is complete.
+\end{proof}
+
+\begin{proof}[Proof for part (iv)] $ $ \newline
+The set of logical connectives $\{\wedge, \vee\}$ is not complete as there is no way to represent one of the propositional variables being equal to zero (i.e: negation) when writing an expression in CNF/DNF. That is to say there is no way to express a tautology or contradiction using these logical connectives due to their property of idempotence.
+\end{proof}
 \section*{Question 2}
 
 \begin{problem}
