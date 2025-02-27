@@ -1,7 +1,15 @@
 
 def load_dimacs(file_name):
     #file_name will be of the form "problem_name.txt"
-    ...
+    clause_set = []
+    with open(file_name, 'r') as dimacs_file:
+        raw_clause_set = [line.split() for line in dimacs_file]
+        raw_clause_set.pop(0)
+        for clause in raw_clause_set:
+            clause.pop()
+            clause_set.append(list(map(int, clause)))
+        
+    return clause_set
 
 
 def simple_sat_solve(clause_set):
@@ -24,7 +32,7 @@ def dpll_sat_solve(clause_set,partial_assignment):
 def test():
     print("Testing load_dimacs")
     try:
-        dimacs = load_dimacs("sat.txt")
+        dimacs = load_dimacs("tests/sat.txt")
         assert dimacs == [[1],[1,-1],[-1,-2]]
         print("Test passed")
     except:
@@ -90,3 +98,5 @@ def test():
         except:
             print("Failed problem " + str(problem))
     print("Finished tests")
+
+test()
