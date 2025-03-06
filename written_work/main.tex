@@ -121,6 +121,40 @@ Using this, we can repeatedly use the distributive property to convert this to c
 \subsection*{Answer}
 
 The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula $\varphi$, and transform it to a new propositional formula $\varphi'$ which is equisatisfiable with $\varphi$, and in conjunctive normal form.
+\begin{gather*}
+  \text{Let } \varphi = (((x_1 \wedge x_2 \wedge x_3) \to (y_1 \wedge y_2 \wedge y_3)) \vee z) \\
+  \text{Introduce new variables for each subformula:} \\
+  \alpha_1 \leftrightarrow x_1 \wedge x_2 \wedge x_3 \\
+  \alpha_2 \leftrightarrow y_1 \wedge y_2 \wedge y_3 \\
+  \alpha_3 \leftrightarrow z \\
+  \alpha_4 \leftrightarrow \alpha_1 \to \alpha_2 \\
+  \alpha_5 \leftrightarrow \alpha_4 \vee \alpha_3 \\
+  \text{Write each expression as conjunctions} \\
+  \text{From } \alpha_1: \\
+  \alpha_1 \leftrightarrow (x_1 \wedge x_2 \wedge x_3) \equiv (\alpha_1 \to (x_1 \wedge x_2 \wedge x_3)) \wedge (\alpha_1 \leftarrow (x_1 \wedge x_2 \wedge x_3)) \\
+  \equiv (\neg \alpha_1 \vee (x_1 \wedge x_2 \wedge x_3)) \wedge (\alpha_1 \vee \neg(x_1 \wedge x_2 \wedge x_3)) \\
+  \equiv (\neg \alpha_1 \vee x_1) \wedge (\neg \alpha_1 \vee x_2) \wedge (\neg \alpha_1 \vee x_3) \wedge (\alpha_1 \vee \neg x_1 \vee \neg x_2 \vee \neg x_3) \\
+  \text{Similarly for } \alpha_2: \\
+  \alpha_2 \leftrightarrow (y_1 \wedge y_2 \wedge y_3) \equiv (\neg \alpha_2 \vee y_1) \wedge (\neg \alpha_2 \vee y_2) \wedge (\neg \alpha_2 \vee y_3) \wedge (\alpha_2 \vee \neg y_1 \vee \neg y_2 \vee \neg y_3) \\
+  \text{For } \alpha_3: \\
+  \alpha_3 \leftrightarrow z \equiv (\alpha_3 \to z) \wedge (\alpha_3 \leftarrow z) \\
+  \equiv (\neg \alpha_3 \vee z) \wedge (\alpha_3 \vee \neg z) \\
+  \text{For } \alpha_4: \\
+  \alpha_4 \leftrightarrow \alpha_1 \to \alpha_2 \equiv (\alpha_4 \to (\alpha_1 \to \alpha_2)) \wedge (\alpha_4 \leftarrow  (\alpha_1 \to \alpha_2)) \\
+  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge (\neg(\alpha_1 \to \alpha_2) \vee \alpha_4) \\
+  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge (\neg(\neg \alpha_1 \vee \alpha_2) \vee \alpha_4) \\
+  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge ((\alpha_1 \wedge \neg \alpha_2) \vee \alpha_4) \\
+  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge (\alpha_1 \vee \alpha_4) \wedge (\neg \alpha_2 \vee \alpha_4) \\
+  \text{For } \alpha_5: \\
+  \alpha_5 \leftrightarrow \alpha_4 \vee \alpha_3 \equiv (\alpha_5 \to (\alpha_4 \vee \alpha_3)) \wedge (\alpha_5 \leftarrow (\alpha_4 \vee \alpha_3)) \\
+  \equiv (\neg \alpha_5 \vee \alpha_4 \vee \alpha_3) \wedge (\neg(\alpha_4 \vee \alpha_3) \vee \alpha_5) \\
+  \equiv (\neg \alpha_5 \vee \alpha_4 \vee \alpha_3) \wedge ((\neg \alpha_4 \wedge \neg \alpha_3) \vee \alpha_5) \\
+  \equiv (\neg \alpha_5 \vee \alpha_4 \vee \alpha_3) \wedge (\neg \alpha_4 \vee \alpha_5) \wedge (\neg \alpha_3 \vee \alpha_5) \\
+  \text{The conjunction of all these variables and the clause } \alpha_5 \\
+  \text{ gives us the Tseitin Transformation of } \varphi' \\
+  \text{To save space, I will write this as a clause set} \\
+  \therefore \varphi' = \{\{\alpha_5\}, \{\neg \alpha_1, x_1\}, \{\neg \alpha_1, x_2\}, \{\neg \alpha_1, x_3\}, \{\alpha_1, \neg x_1, \neg x_2, \neg x_3\}, \{\neg \alpha_2, y_1\}, \{\neg \alpha_2, y_2,\} \\ \{\neg \alpha_2, y_3\}, \{\alpha_2, \neg y_1, \neg y_2, \neg y_3\}, \{\neg \alpha_3, z\}, \{\alpha_3, \neg z\}, \{\neg \alpha_4, \neg \alpha_1, \alpha_2\}, \{\alpha_1, \alpha_4\}, \{\neg \alpha_2, \alpha_4\}, \{\neg \alpha_5, \alpha_4, \alpha_3\} \\ \{\neg \alpha_4, \alpha_5\}, \{\neg \alpha_3. \alpha_5\}\}
+\end{gather*}
 
 \section*{Question 4}
 
