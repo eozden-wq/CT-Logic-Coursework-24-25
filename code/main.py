@@ -15,7 +15,7 @@ def load_dimacs(file_name):
     return clause_set
 
 
-def simple_sat_solve(clause_set):
+def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     num_vars = 0
     for clause in clause_set:
         max_num_in_clause = abs(max(clause, key=abs))
@@ -52,30 +52,35 @@ def simple_sat_solve(clause_set):
     return False
 
 
-def add_assignment(partial_assignment, assignment):
-    partial_assignment.append(assignment)
+def flip_assignment(partial_assignment, assignment):
+    partial_assignment[assignment - 1] *= -1
     return partial_assignment
 
-
+# блять
 def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list | bool:
     if partial_assignment is None:
-        partial_assignment = []
+        num_vars = 0
+        for clause in clause_set:
+            if abs(max(clause, key=abs)) > num_vars:
+                num_vars = abs(max(clause, key=abs))
+        partial_assignment = [x + 1 for x in range(num_vars)]
 
-    if clause_set == []:
+    if not clause_set:
         return partial_assignment
-    elif clause_set == [[]]:
+    elif [] in clause_set:
         return False
     else:
-        clause_set1 = [[val for val in clause if val != -1 * current_var]
-                       for clause in clause_set if -1 * current_var in clause]
-        clause_set2 = [[val for val in clause if val != current_var]
-                       for clause in clause_set if current_var in clause]
-        if branching_sat_solve(clause_set1, add_assignment(partial_assignment, current_var), current_var=current_var+1) != False:
+        clause_set1 = [[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause]
+        clause_set2 = [[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause]
+        if branching_sat_solve(clause_set1, partial_assignment, current_var + 1):
             return partial_assignment
-        elif branching_sat_solve(clause_set2, add_assignment(partial_assignment, -1 * current_var), current_var=current_var + 1) != False:
-            return partial_assignment
+        elif branching_sat_solve(clause_set2, flip_assignment(partial_assignment, current_var), current_var + 1):
+            partial_assignment = flip_assignment(partial_assignment, current_var)
+            return flip_assignment(partial_assignment, current_var)
         else:
             return False
+
+
 
 
 def unit_propagate(clause_set):
@@ -87,5 +92,6 @@ def dpll_sat_solve(clause_set, partial_assignment):
 
 
 sat1 = [[1, -2, -5], [-1, 6], [-2, -3], [3, -4], [-4, 5, -6]]
+sat2 = [[1], [1,-1], [-1,-2]]
 unsat1 = [[1, -2], [1, 2], [-1, -2], [-1, 2]]
 print(branching_sat_solve(unsat1))
