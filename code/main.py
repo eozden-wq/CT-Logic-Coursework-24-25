@@ -1,3 +1,5 @@
+import time
+
 
 def load_dimacs(file_name: str) -> list[list[int]]:
     # file_name will be of the form "problem_name.txt"
@@ -52,24 +54,9 @@ def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     return False
 
 
-<< << << < HEAD
-
-
-def add_assignment(partial_assignment: list[int], assignment: int) -> list[int]:
-    partial_assignment.append(assignment)
-
-
-== == == =
-
-
-def flip_assignment(partial_assignment, assignment):
+def flip_assignment(partial_assignment: list[int], assignment: int) -> list[int]:
     partial_assignment[assignment - 1] *= -1
-
-
->>>>>> > f1e856dcbb925d35b26147007f1f029f380c4434
-return partial_assignment
-
-# блять
+    return partial_assignment
 
 
 def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list | bool:
@@ -115,9 +102,37 @@ def unit_propagate(clause_set: list[list[int]]) -> list[list[int]]:
     return clause_set
 
 
-def dpll_sat_solve(clause_set, partial_assignment):
-    ...
+def dpll_sat_solve(clause_set, partial_assignment=None, current_var=0):
+    if partial_assignment is None:
+        num_vars = 0
+        for clause in clause_set:
+            if abs(max(clause, key=abs)) > num_vars:
+                num_vars = abs(max(clause, key=abs))
+        partial_assignment = [x + 1 for x in range(num_vars)]
+
+    unit_propagate(clause_set)
+    if not clause_set:
+        return partial_assignment
+    elif [] in clause_set:
+        return False
+    else:
+        clause_set1 = [[val for val in clause if val != -current_var]
+                       for clause in clause_set if current_var not in clause]
+        clause_set2 = [[val for val in clause if val != current_var]
+                       for clause in clause_set if -current_var not in clause]
+        if dpll_sat_solve(clause_set1, partial_assignment, current_var + 1):
+            return partial_assignment
+        elif dpll_sat_solve(clause_set2, flip_assignment(partial_assignment, current_var), current_var + 1):
+            partial_assignment = flip_assignment(
+                partial_assignment, current_var)
+            return flip_assignment(partial_assignment, current_var)
+        else:
+            return False
 
 
-clause_set = [[1, 2, 3], [1], [-2], [-2, 3]]
-print(unit_propagate(clause_set))
+if __name__ == "__main__":
+    clause_set = load_dimacs(input("Name of the DIMACS file: "))
+    s = time.time()
+    print(branching_sat_solve(clause_set))
+    e = time.time()
+    print(e-s)
