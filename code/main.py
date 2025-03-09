@@ -1,5 +1,5 @@
 
-def load_dimacs(file_name):
+def load_dimacs(file_name: str) -> list[list[int]]:
     # file_name will be of the form "problem_name.txt"
     clause_set = []
     with open(file_name, 'r') as dimacs_file:
@@ -15,7 +15,7 @@ def load_dimacs(file_name):
     return clause_set
 
 
-def simple_sat_solve(clause_set):
+def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     num_vars = 0
     for clause in clause_set:
         max_num_in_clause = abs(max(clause, key=abs))
@@ -52,7 +52,7 @@ def simple_sat_solve(clause_set):
     return False
 
 
-def add_assignment(partial_assignment, assignment):
+def add_assignment(partial_assignment: list[int], assignment: int) -> list[int]:
     partial_assignment.append(assignment)
     return partial_assignment
 
@@ -78,14 +78,25 @@ def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[in
             return False
 
 
-def unit_propagate(clause_set):
-    ...
+def get_unit_clause(clause_set: list[list[int]]) -> int | bool:
+    for clause in clause_set:
+        if len(clause) == 1:
+            return clause[0]
+
+    return False
+
+
+def unit_propagate(clause_set: list[list[int]]) -> list[list[int]]:
+    while unit_clause := get_unit_clause(clause_set):
+        clause_set = [[val for val in clause if val != -1 * unit_clause]
+                      for clause in clause_set if unit_clause not in clause]
+
+    return clause_set
 
 
 def dpll_sat_solve(clause_set, partial_assignment):
     ...
 
 
-sat1 = [[1, -2, -5], [-1, 6], [-2, -3], [3, -4], [-4, 5, -6]]
-unsat1 = [[1, -2], [1, 2], [-1, -2], [-1, 2]]
-print(branching_sat_solve(unsat1))
+clause_set = [[1, 2, 3], [1], [-2], [-2, 3]]
+print(unit_propagate(clause_set))
