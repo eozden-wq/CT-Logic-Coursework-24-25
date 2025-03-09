@@ -52,28 +52,49 @@ def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     return False
 
 
+<< << << < HEAD
+
+
 def add_assignment(partial_assignment: list[int], assignment: int) -> list[int]:
     partial_assignment.append(assignment)
-    return partial_assignment
+
+
+== == == =
+
+
+def flip_assignment(partial_assignment, assignment):
+    partial_assignment[assignment - 1] *= -1
+
+
+>>>>>> > f1e856dcbb925d35b26147007f1f029f380c4434
+return partial_assignment
+
+# блять
 
 
 def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list | bool:
     if partial_assignment is None:
-        partial_assignment = []
+        num_vars = 0
+        for clause in clause_set:
+            if abs(max(clause, key=abs)) > num_vars:
+                num_vars = abs(max(clause, key=abs))
+        partial_assignment = [x + 1 for x in range(num_vars)]
 
-    if clause_set == []:
+    if not clause_set:
         return partial_assignment
-    elif clause_set == [[]]:
+    elif [] in clause_set:
         return False
     else:
-        clause_set1 = [[val for val in clause if val != -1 * current_var]
-                       for clause in clause_set if -1 * current_var in clause]
+        clause_set1 = [[val for val in clause if val != -current_var]
+                       for clause in clause_set if current_var not in clause]
         clause_set2 = [[val for val in clause if val != current_var]
-                       for clause in clause_set if current_var in clause]
-        if branching_sat_solve(clause_set1, add_assignment(partial_assignment, current_var), current_var=current_var+1) != False:
+                       for clause in clause_set if -current_var not in clause]
+        if branching_sat_solve(clause_set1, partial_assignment, current_var + 1):
             return partial_assignment
-        elif branching_sat_solve(clause_set2, add_assignment(partial_assignment, -1 * current_var), current_var=current_var + 1) != False:
-            return partial_assignment
+        elif branching_sat_solve(clause_set2, flip_assignment(partial_assignment, current_var), current_var + 1):
+            partial_assignment = flip_assignment(
+                partial_assignment, current_var)
+            return flip_assignment(partial_assignment, current_var)
         else:
             return False
 
