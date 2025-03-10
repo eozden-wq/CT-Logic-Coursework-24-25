@@ -54,34 +54,19 @@ def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     return False
 
 
-def flip_assignment(partial_assignment: list[int], assignment: int) -> list[int]:
-    partial_assignment[assignment - 1] *= -1
-    return partial_assignment
-
-
 def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list | bool:
     if partial_assignment is None:
-        num_vars = 0
-        for clause in clause_set:
-            if abs(max(clause, key=abs)) > num_vars:
-                num_vars = abs(max(clause, key=abs))
-        partial_assignment = [x + 1 for x in range(num_vars)]
+        partial_assignment = []
 
     if not clause_set:
         return partial_assignment
     elif [] in clause_set:
         return False
     else:
-        clause_set1 = [[val for val in clause if val != -current_var]
-                       for clause in clause_set if current_var not in clause]
-        clause_set2 = [[val for val in clause if val != current_var]
-                       for clause in clause_set if -current_var not in clause]
-        if branching_sat_solve(clause_set1, partial_assignment, current_var + 1):
-            return partial_assignment
-        elif branching_sat_solve(clause_set2, flip_assignment(partial_assignment, current_var), current_var + 1):
-            partial_assignment = flip_assignment(
-                partial_assignment, current_var)
-            return flip_assignment(partial_assignment, current_var)
+        if res := branching_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var], current_var + 1):
+            return res
+        elif res := branching_sat_solve([[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause], partial_assignment + [-current_var], current_var + 1):
+            return res
         else:
             return False
 
@@ -102,13 +87,9 @@ def unit_propagate(clause_set: list[list[int]]) -> list[list[int]]:
     return clause_set
 
 
-def dpll_sat_solve(clause_set, partial_assignment=None, current_var=0):
+def dpll_sat_solve(clause_set, partial_assignment=None, current_var=1):
     if partial_assignment is None:
-        num_vars = 0
-        for clause in clause_set:
-            if abs(max(clause, key=abs)) > num_vars:
-                num_vars = abs(max(clause, key=abs))
-        partial_assignment = [x + 1 for x in range(num_vars)]
+        partial_assignment = []
 
     unit_propagate(clause_set)
     if not clause_set:
@@ -116,23 +97,30 @@ def dpll_sat_solve(clause_set, partial_assignment=None, current_var=0):
     elif [] in clause_set:
         return False
     else:
-        clause_set1 = [[val for val in clause if val != -current_var]
-                       for clause in clause_set if current_var not in clause]
-        clause_set2 = [[val for val in clause if val != current_var]
-                       for clause in clause_set if -current_var not in clause]
-        if dpll_sat_solve(clause_set1, partial_assignment, current_var + 1):
-            return partial_assignment
-        elif dpll_sat_solve(clause_set2, flip_assignment(partial_assignment, current_var), current_var + 1):
-            partial_assignment = flip_assignment(
-                partial_assignment, current_var)
-            return flip_assignment(partial_assignment, current_var)
+        # I love the walrus operator
+        if res := dpll_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var], current_var + 1):
+            return res
+        elif res := dpll_sat_solve([[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause], partial_assignment + [-current_var], current_var + 1):
+            return res
         else:
             return False
+
+
+def clause_satisfied(clause, assignment):
+    assignment_set = set(assignment)
+    return any(literal in assignment_set for literal in clause)
+
+
+def clause_set_satisfied(clause_set, assignment):
+    return all(clause_satisfied(clause, assignment) for clause in clause_set)
 
 
 if __name__ == "__main__":
     clause_set = load_dimacs(input("Name of the DIMACS file: "))
     s = time.time()
-    print(branching_sat_solve(clause_set))
+    assignment = dpll_sat_solve(clause_set)
     e = time.time()
     print(e-s)
+    print(assignment)
+    if assignment:
+        print(clause_set_satisfied(clause_set, assignment))
