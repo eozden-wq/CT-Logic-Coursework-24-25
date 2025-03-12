@@ -54,13 +54,20 @@ def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     return False
 
 
+memo = set()
+
+
 def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list | bool:
     if partial_assignment is None:
         partial_assignment = []
 
+    if ''.join(map(str, partial_assignment)) in memo:
+        return False
+
     if not clause_set:
         return partial_assignment
     elif [] in clause_set:
+        memo.add(''.join(map(str, partial_assignment)))
         return False
     else:
         if res := branching_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var], current_var + 1):
@@ -68,6 +75,7 @@ def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[in
         elif res := branching_sat_solve([[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause], partial_assignment + [-current_var], current_var + 1):
             return res
         else:
+            memo.add(''.join(map(str, partial_assignment)))
             return False
 
 
@@ -91,7 +99,7 @@ def dpll_sat_solve(clause_set, partial_assignment=None, current_var=1):
     if partial_assignment is None:
         partial_assignment = []
 
-    unit_propagate(clause_set)
+    clause_set = unit_propagate(clause_set)
     if not clause_set:
         return partial_assignment
     elif [] in clause_set:
