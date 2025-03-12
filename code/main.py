@@ -54,15 +54,10 @@ def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     return False
 
 
-memo = set()
-
 
 def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list | bool:
     if partial_assignment is None:
         partial_assignment = []
-
-    if ''.join(map(str, partial_assignment)) in memo:
-        return False
 
     if not clause_set:
         return partial_assignment
@@ -75,7 +70,6 @@ def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[in
         elif res := branching_sat_solve([[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause], partial_assignment + [-current_var], current_var + 1):
             return res
         else:
-            memo.add(''.join(map(str, partial_assignment)))
             return False
 
 
@@ -87,28 +81,30 @@ def get_unit_clause(clause_set: list[list[int]]) -> int | bool:
     return False
 
 
-def unit_propagate(clause_set: list[list[int]]) -> list[list[int]]:
+def unit_propagate(clause_set: list[list[int]], partial_assignment: list[int]) -> list[list[int]]:
     while unit_clause := get_unit_clause(clause_set):
         clause_set = [[val for val in clause if val != -1 * unit_clause]
                       for clause in clause_set if unit_clause not in clause]
+        partial_assignment += [unit_clause]
 
-    return clause_set
+    return clause_set, partial_assignment
 
 
-def dpll_sat_solve(clause_set, partial_assignment=None, current_var=1):
+def dpll_sat_solve(clause_set, partial_assignment=None):
     if partial_assignment is None:
         partial_assignment = []
 
-    clause_set = unit_propagate(clause_set)
+    clause_set,partial_assignment = unit_propagate(clause_set, partial_assignment)
     if not clause_set:
         return partial_assignment
     elif [] in clause_set:
         return False
     else:
+        current_var = clause_set[0][0]
         # I love the walrus operator
-        if res := dpll_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var], current_var + 1):
+        if res := dpll_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var]):
             return res
-        elif res := dpll_sat_solve([[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause], partial_assignment + [-current_var], current_var + 1):
+        elif res := dpll_sat_solve([[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause], partial_assignment + [-current_var]):
             return res
         else:
             return False
