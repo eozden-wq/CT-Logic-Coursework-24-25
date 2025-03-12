@@ -62,7 +62,6 @@ def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[in
     if not clause_set:
         return partial_assignment
     elif [] in clause_set:
-        memo.add(''.join(map(str, partial_assignment)))
         return False
     else:
         if res := branching_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var], current_var + 1):
@@ -100,6 +99,7 @@ def dpll_sat_solve(clause_set, partial_assignment=None):
     elif [] in clause_set:
         return False
     else:
+        # Clever little heuristic to get the next variable to branch on
         current_var = clause_set[0][0]
         # I love the walrus operator
         if res := dpll_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var]):
