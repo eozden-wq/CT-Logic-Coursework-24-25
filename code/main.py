@@ -1,4 +1,5 @@
 import time
+from functools import lru_cache
 
 
 def load_dimacs(file_name: str) -> list[list[int]]:
@@ -88,6 +89,18 @@ def unit_propagate(clause_set: list[list[int]], partial_assignment: list[int]) -
 
     return clause_set, partial_assignment
 
+# Dynamic Largest Individual Sum - I'm not quite sure why, but this decision heuristic seems to work pretty well. Went from 25ms to 10ms for 8queens
+def choose_var(clause_set: list[list[int]]) -> int:
+    flattened = [item for clause in clause_set for item in clause]
+    literals = {}
+    for var in flattened:
+        if abs(var) not in literals:
+            literals[abs(var)] = 1
+        else:
+            literals[abs(var)] += 1
+    
+    return max(literals, key=literals.get)
+
 
 def dpll_sat_solve(clause_set, partial_assignment=None):
     if partial_assignment is None:
@@ -100,7 +113,8 @@ def dpll_sat_solve(clause_set, partial_assignment=None):
         return False
     else:
         # Clever little heuristic to get the next variable to branch on
-        current_var = clause_set[0][0]
+        # current_var = clause_set[0][0]
+        current_var = choose_var(clause_set)
         # I love the walrus operator
         if res := dpll_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var]):
             return res
