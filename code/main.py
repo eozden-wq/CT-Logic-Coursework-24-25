@@ -56,7 +56,7 @@ def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
 
 
 
-def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list | bool:
+def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list[int] | bool:
     if partial_assignment is None:
         partial_assignment = []
 
@@ -102,7 +102,7 @@ def choose_var(clause_set: list[list[int]]) -> int:
     return max(literals, key=literals.get)
 
 
-def dpll_sat_solve(clause_set, partial_assignment=None):
+def dpll_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None) -> list[int] | bool:
     if partial_assignment is None:
         partial_assignment = []
 
@@ -139,6 +139,6 @@ if __name__ == "__main__":
     assignment = dpll_sat_solve(clause_set)
     e = time.time()
     print(e-s)
-    print(assignment)
+    print(sorted(assignment) if assignment else False)
     if assignment:
         print(clause_set_satisfied(clause_set, assignment))
