@@ -152,14 +152,30 @@ The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula
 
 \begin{problem}
   State with justification if each of the following sentences of predicate logic is logically valid. \\
-  (i) $(\forall x \exists y \forall z \ E(x,y) \wedge E(y,z)) \to (\forall x \forall z \exists y \ E(x,y) \wedge E(y,z))$ \\
-  (ii) $(\forall x \exists y \exists u \forall v \ E(x,y) \wedge E(u,v)) \to (\exists u \forall v \forall x \exists y \ E(x,y) \wedge E(u,v))$ \\
+  (i) $(\forall x \exists y \forall z (E(x,y) \wedge E(y,z))) \to (\forall x \forall z \exists y (E(x,y) \wedge E(y,z)))$ \\
+  (ii) $(\forall x \exists y \exists u \forall v (E(x,y) \wedge E(u,v))) \to (\exists u \forall v \forall x \exists y (E(x,y) \wedge E(u,v)))$ \\
   (iii) $(\forall x \exists y \forall z \ R(x,y,z)) \to (\exists x \forall y \exists z \ R(x,y,z))$ \\
-  (iv) $((\forall x \forall y \exists z (E(x,y) \wedge E(y,z))) \to (\forall x \forall y \forall z (E(x,y) \vee E(y,z))))$
+  (iv) $(\forall x \forall y \exists z (E(x,y) \wedge E(y,z))) \to (\forall x \forall y \forall z (E(x,y) \vee E(y,z)))$
 \end{problem}
 
 \subsection*{Answer} \ \newline
-(i) This sentence can be translated as such: if for every $x$, there exists a $y$, for every $z$ the relation $E(x,y)$ holds and $E(y,z)$ holds, then for every $x$ and $z$, there exists $y$ such that the relation $E(x,y)$ holds and $E(y,z)$ holds.
+(i) Logically Valid.
+\begin{proof}
+\end{proof}  \noindent
+(ii) Logically Valid.
+\begin{proof}
+\end{proof} \noindent
+(iii) Logically Invalid.
+\begin{proof}
+In order to demonstrate that this is a logically invalid sentence, I will provide a counter-model: Consider $R$ a terenary relation over the domain $\{0, 1\}$, where
+$$
+R := \{(0,0,0),(0,0,1),(1,0,0),(1,0,1)\}
+$$
+From this we can see, that for all values of x, there in fact is a y, for all z. However there doesn't exist an $x$ for all values of $y$, where there exists a $z$. This is because $y$ only appears as a $0$ in the relation, hence $y$ cannot take each value in the domain in this relation.
+\end{proof} \noindent
+(iv) Logically Valid.
+\begin{proof}
+\end{proof} \noindent
 
 \section*{Question 5}
 
@@ -169,8 +185,8 @@ The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula
   (ii) $\exists x \forall y \forall z \exists w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ \\
   (iii) $\forall y \exists x \forall z \exists w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ \\
   (iv) $\exists x \exists y \exists z \forall w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ \\
-  (v) $\forall x_1 \exists x_2 \forall y_1 \exists y_2 \forall z_1 \exists z_2 \forall z \exists y \ E(x_1, x_2) \wedge E(x_2, w) \wedge E(y_1, y_2) \wedge E(y_2, w) \wedge E(z_1, z_2) \wedge E(z_2, w) \wedge E(z,w)$ \\
-  (vi) $\forall x_1 \exists x_2 \forall y_1 \exists y_2 \forall z_1 \forall z \exists z_2 \exists y \ E(x_1, x_2) \wedge E(x_2, w) \wedge E(y_1, y_2) \wedge E(y_2, w) \wedge E(z_1, z_2) \wedge E(z_2, w) \wedge E(z,w)$
+  (v) $\forall x_1 \exists x_2 \forall y_1 \exists y_2 \forall z_1 \exists z_2 \forall z \exists w \ E(x_1, x_2) \wedge E(x_2, w) \wedge E(y_1, y_2) \wedge E(y_2, w) \wedge E(z_1, z_2) \wedge E(z_2, w) \wedge E(z,w)$ \\
+  (vi) $\forall x_1 \exists x_2 \forall y_1 \exists y_2 \forall z_1 \forall z \exists z_2 \exists w \ E(x_1, x_2) \wedge E(x_2, w) \wedge E(y_1, y_2) \wedge E(y_2, w) \wedge E(z_1, z_2) \wedge E(z_2, w) \wedge E(z,w)$
 \end{problem}
 
 \subsection*{Answer} \ \newline
@@ -183,5 +199,9 @@ $$
 x = 0, y = 1, z = 2
 $$
 That is to say, the expression inside the brackets requires that $x \neq w, y \neq w, z \neq w$. However if we assign $x,y,z$ uniquely, by the pigeonhole principle, it follows that there will exist no such $w$, that satisfies the sentence. \newline \newline
-(ii)
+(ii) This sentence can be refuted by considering the fact that if $x, y, z$ are unique, then there will exist no $w$, such that the conjunction of the atomic formulae $E(x,w), E(y,w), E(z,w)$ are satisfied. From the domain of the interpretation, we can deduce that there is no such value of $x$. \newline \newline
+(iii) True.
+(iv) True.
+(v)
+(vi)
 \end{document}
