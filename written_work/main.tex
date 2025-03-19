@@ -118,17 +118,15 @@ Using this, we can repeatedly use the distributive property to convert this to c
   What is the purpose of Tseitin's Algorithm? Apply Tseitin's Algorithm to turn the propositional formula $(((x_1 \wedge x_2 \wedge x_3) \to (y_1 \wedge y_2 \wedge y_3)) \vee z)$ to CNF.
 \end{problem}
 
-\subsection*{Answer}
-
+\subsection*{Answer} \ \newline
 The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula $\varphi$, and transform it to a new propositional formula $\varphi'$ which is equisatisfiable with $\varphi$, and in conjunctive normal form.
 \begin{gather*}
   \text{Let } \varphi = (((x_1 \wedge x_2 \wedge x_3) \to (y_1 \wedge y_2 \wedge y_3)) \vee z) \\
   \text{Introduce new variables for each subformula:} \\
   \alpha_1 \leftrightarrow x_1 \wedge x_2 \wedge x_3 \\
   \alpha_2 \leftrightarrow y_1 \wedge y_2 \wedge y_3 \\
-  \alpha_3 \leftrightarrow z \\
-  \alpha_4 \leftrightarrow \alpha_1 \to \alpha_2 \\
-  \alpha_5 \leftrightarrow \alpha_4 \vee \alpha_3 \\
+  \alpha_3 \leftrightarrow \alpha_1 \to \alpha_2 \\
+  \alpha_4 \leftrightarrow \alpha_3 \vee z \\
   \text{Write each expression as conjunctions} \\
   \text{From } \alpha_1: \\
   \alpha_1 \leftrightarrow (x_1 \wedge x_2 \wedge x_3) \equiv (\alpha_1 \to (x_1 \wedge x_2 \wedge x_3)) \wedge (\alpha_1 \leftarrow (x_1 \wedge x_2 \wedge x_3)) \\
@@ -136,24 +134,18 @@ The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula
   \equiv (\neg \alpha_1 \vee x_1) \wedge (\neg \alpha_1 \vee x_2) \wedge (\neg \alpha_1 \vee x_3) \wedge (\alpha_1 \vee \neg x_1 \vee \neg x_2 \vee \neg x_3) \\
   \text{Similarly for } \alpha_2: \\
   \alpha_2 \leftrightarrow (y_1 \wedge y_2 \wedge y_3) \equiv (\neg \alpha_2 \vee y_1) \wedge (\neg \alpha_2 \vee y_2) \wedge (\neg \alpha_2 \vee y_3) \wedge (\alpha_2 \vee \neg y_1 \vee \neg y_2 \vee \neg y_3) \\
-  \text{For } \alpha_3: \\
-  \alpha_3 \leftrightarrow z \equiv (\alpha_3 \to z) \wedge (\alpha_3 \leftarrow z) \\
-  \equiv (\neg \alpha_3 \vee z) \wedge (\alpha_3 \vee \neg z) \\
+  \text{For } \alpha_3: \\ 
+  \alpha_3 \leftrightarrow (\alpha_1 \to \alpha_2) \equiv (\alpha_3 \to (\alpha_1 \to \alpha_2)) \wedge (\alpha_3 \leftarrow (\alpha_1 \to \alpha_2))\\ 
+  \equiv (\neg \alpha_3 \vee (\neg \alpha_1 \vee \alpha_2)) \wedge (\neg(\neg \alpha_1 \vee \alpha_2) \vee \alpha_3)  \equiv (\neg \alpha_3 \vee \neg \alpha_1 \vee \alpha_2) \wedge ((\alpha_1 \wedge \neg \alpha_2) \vee \alpha_3) \\
+  \equiv (\neg \alpha_1 \vee \alpha_2 \vee \neg \alpha_3) \wedge (\alpha_1 \vee \alpha_3) \wedge (\neg \alpha_2 \vee \alpha_3) \\
   \text{For } \alpha_4: \\
-  \alpha_4 \leftrightarrow \alpha_1 \to \alpha_2 \equiv (\alpha_4 \to (\alpha_1 \to \alpha_2)) \wedge (\alpha_4 \leftarrow  (\alpha_1 \to \alpha_2)) \\
-  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge (\neg(\alpha_1 \to \alpha_2) \vee \alpha_4) \\
-  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge (\neg(\neg \alpha_1 \vee \alpha_2) \vee \alpha_4) \\
-  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge ((\alpha_1 \wedge \neg \alpha_2) \vee \alpha_4) \\
-  \equiv (\neg \alpha_4 \vee \neg \alpha_1 \vee \alpha_2) \wedge (\alpha_1 \vee \alpha_4) \wedge (\neg \alpha_2 \vee \alpha_4) \\
-  \text{For } \alpha_5: \\
-  \alpha_5 \leftrightarrow \alpha_4 \vee \alpha_3 \equiv (\alpha_5 \to (\alpha_4 \vee \alpha_3)) \wedge (\alpha_5 \leftarrow (\alpha_4 \vee \alpha_3)) \\
-  \equiv (\neg \alpha_5 \vee \alpha_4 \vee \alpha_3) \wedge (\neg(\alpha_4 \vee \alpha_3) \vee \alpha_5) \\
-  \equiv (\neg \alpha_5 \vee \alpha_4 \vee \alpha_3) \wedge ((\neg \alpha_4 \wedge \neg \alpha_3) \vee \alpha_5) \\
-  \equiv (\neg \alpha_5 \vee \alpha_4 \vee \alpha_3) \wedge (\neg \alpha_4 \vee \alpha_5) \wedge (\neg \alpha_3 \vee \alpha_5) \\
-  \text{The conjunction of all these variables and the clause } \alpha_5 \\
+  \alpha_4 \leftrightarrow (\alpha_3 \vee z) \equiv (\alpha_4 \to (\alpha_3 \vee z)) \wedge (\alpha_4 \leftarrow (\alpha_3 \vee z)) \\ 
+  \equiv (\neg \alpha_4 \vee \alpha_3 \vee z) \wedge (\neg (\alpha_3 \vee z) \vee \alpha_4) \equiv (\neg \alpha_4 \vee \alpha_3 \vee z) \wedge ((\neg \alpha_3 \wedge \neg z) \vee \alpha_4) \\
+  \equiv (\neg \alpha_4 \vee \alpha_3 \vee z) \wedge (\neg \alpha_3 \vee \alpha_4) \wedge (\neg z \vee \alpha_4) \\
+  \text{The conjunction of all these variables and the clause } \alpha_4 \\
   \text{ gives us the Tseitin Transformation of } \varphi' \\
   \text{To save space, I will write this as a clause set} \\
-  \therefore \varphi' = \{\{\alpha_5\}, \{\neg \alpha_1, x_1\}, \{\neg \alpha_1, x_2\}, \{\neg \alpha_1, x_3\}, \{\alpha_1, \neg x_1, \neg x_2, \neg x_3\}, \{\neg \alpha_2, y_1\}, \{\neg \alpha_2, y_2,\} \\ \{\neg \alpha_2, y_3\}, \{\alpha_2, \neg y_1, \neg y_2, \neg y_3\}, \{\neg \alpha_3, z\}, \{\alpha_3, \neg z\}, \{\neg \alpha_4, \neg \alpha_1, \alpha_2\}, \{\alpha_1, \alpha_4\}, \{\neg \alpha_2, \alpha_4\}, \{\neg \alpha_5, \alpha_4, \alpha_3\} \\ \{\neg \alpha_4, \alpha_5\}, \{\neg \alpha_3, \alpha_5\}\}
+  \therefore \varphi' = \{\{\alpha_4\}, \{-\alpha_1, x_1\}, \{-\alpha_1, x_2\}, \{-\alpha_1, x_3\}, \{\alpha_1, -x_1, -x_2, -x_3\}, \\ \{-\alpha_2, y_1\}, \{-\alpha_2, y_2\}, \{-\alpha_2, y_3\}, \{\alpha_2, -y_1, -y_2, -y_3\}, \\ \{-\alpha_1, \alpha_2, -\alpha_3\}, \{\alpha_1, \alpha_3\}, \{-\alpha_2, \alpha_3\}, \{-\alpha_4, \alpha_3, z\}, \{-\alpha_3, \alpha_4\}, \{-z, \alpha_4\}\}
 \end{gather*}
 
 \section*{Question 4}
@@ -165,6 +157,9 @@ The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula
   (iii) $(\forall x \exists y \forall z \ R(x,y,z)) \to (\exists x \forall y \exists z \ R(x,y,z))$ \\
   (iv) $((\forall x \forall y \exists z (E(x,y) \wedge E(y,z))) \to (\forall x \forall y \forall z (E(x,y) \vee E(y,z))))$
 \end{problem}
+
+\subsection*{Answer} \ \newline
+(i) This sentence can be translated as such: if for every $x$, there exists a $y$, for every $z$ the relation $E(x,y)$ holds and $E(y,z)$ holds, then for every $x$ and $z$, there exists $y$ such that the relation $E(x,y)$ holds and $E(y,z)$ holds.
 
 \section*{Question 5}
 
