@@ -216,12 +216,12 @@ $$
 That is to say, the expression inside the brackets requires that $x \neq w, y \neq w, z \neq w$. However if we assign $x,y,z$ uniquely, by the pigeonhole principle, it follows that there will exist no such $w$, that satisfies the sentence. \newline \newline
 (ii) False. This sentence can be refuted by considering the fact that if $x, y, z$ are unique, then there will exist no $w$, such that the conjunction of the atomic formulae $E(x,w), E(y,w), E(z,w)$ are satisfied. From the domain of the interpretation, we can deduce that there is no such value of $x$. \newline \newline
 For the most part of the rest of this question, it will be easier to visualize the interpretation as a graph:
-
 \begin{center}
     \includegraphics[scale=0.5]{q5-graph.png}
 \end{center}
+Where an edge on the graph represents the unordered pairs of numbers in the defined domain. \newline \newline
 (iii) True. The sentence $\forall y \exists x \forall z \exists w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ can be demonstrated to hold true, as for all y, if we choose the $x$, such that $x = y$, then for all values of $z$, it will follow that there will always exist a $w$ that is not already picked on the graph \newline \newline
 (iv) True. In this interpretation, for the sentence to be true, there must exist $x,y,z$ for all $w$, such that none of $x,y,z$ is equal to $w$. It then becomes clear that for each $w$, we can choose $x,y,z$ such that $x=y$ or $x = z$ or $y = z$ and $x,y,z \neq w$.\newline \newline
-(v) False.  All $x_1$ will have an adjacent $x_2$, and $x_2$ must have an adjacent $w$. All $y_1$ must have an adjacent $y_2$ and $y_2$ must be adjacent to $w$, and the same holds for $z_1$ and $z_2$. As well as that, for all nodes that $z$ can be, $w$ must be adjacent to it. However, if $z$ and $w$ are the same node, then this fails, this does in fact not hold for all possible nodes $z$ can be. \newline \newline
-(vi) False. \newline \newline
+(v) False.  If we assign $x_1,y_1,z_1$ uniquely, then there will be adjacent vertices $x_2,y_2,z_2$, where 2 of the 3 variables $x_2,y_2,z_2$ must be the same. For the sentence to hold, all $x_2,y_2,z_2, z$ there must exist an adjacent node $w$. However, if $x_2$, $y_2$ and $z_2$ are unique, for all values of $z$ there will be no $w$ such that the expression is satisfied.   \newline \newline
+(vi) False. Although this is similar to the previous question, in that if the previous question were to hold true, then the answer to this question would also follow. However since it is in fact not true, it is not necessary that the conclusion of this sentence is the same as the previous one. If we assign $x_1$ and an adjacent $x_2$, do the same for $y_1$ and $y_2$, and then assign $z_1$, where $z_1 \neq y_1 \neq x_1$. If $y_2$ and $x_2$ are both assigned uniquely, when we assign $z$ and $z_2$, where once again $z_2 \neq y_2 \neq x_1$, then no value of $w$ will satisfy the equation. \newline \newline
 \end{document}
