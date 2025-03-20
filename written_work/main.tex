@@ -164,6 +164,12 @@ The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula
 \end{proof}  \noindent
 (ii) Logically Valid.
 \begin{proof}
+    We can begin by considering an interpretation $I$:
+    \begin{gather*}
+        I \models \forall x \exists y \exists u \forall v (E(x,y) \wedge E(u,v)) \iff I \models \forall x \exists y E(x,y) \wedge \exists u \forall v E(u, v) \\ 
+        \iff I \models \exists u \forall v \forall x \exists y (E(x,y) \wedge E(u,v))
+    \end{gather*}
+    Hence it follows that $\forall x \exists y \exists u \forall v (E(x,y) \wedge E(u,v)) \equiv \exists u \forall v \forall x \exists y(E(x,y) \wedge E(u,v))$. Since the antecedent and consequent are logically equivalent, it follows that this sentence is a tautology, therefore logically valid.
 \end{proof} \noindent
 (iii) Logically Invalid.
 \begin{proof}
@@ -194,14 +200,14 @@ For the purposes of this question, it will be easier to express the relation $E$
 $$
 E := \{(u,v) \in \{0,1,2\} : u \neq v \}
 $$
-(i) This sentence can be refuted by assigning the following variables:
+(i) False. This sentence can be refuted by assigning the following variables:
 $$
 x = 0, y = 1, z = 2
 $$
 That is to say, the expression inside the brackets requires that $x \neq w, y \neq w, z \neq w$. However if we assign $x,y,z$ uniquely, by the pigeonhole principle, it follows that there will exist no such $w$, that satisfies the sentence. \newline \newline
-(ii) This sentence can be refuted by considering the fact that if $x, y, z$ are unique, then there will exist no $w$, such that the conjunction of the atomic formulae $E(x,w), E(y,w), E(z,w)$ are satisfied. From the domain of the interpretation, we can deduce that there is no such value of $x$. \newline \newline
-(iii) True.
-(iv) True.
-(v)
-(vi)
+(ii) False. This sentence can be refuted by considering the fact that if $x, y, z$ are unique, then there will exist no $w$, such that the conjunction of the atomic formulae $E(x,w), E(y,w), E(z,w)$ are satisfied. From the domain of the interpretation, we can deduce that there is no such value of $x$. \newline \newline
+(iii) True. \newline \newline
+(iv) True. In this interpretation, for the sentence to be true, there must exist $x,y,z$ for all $w$, such that none of $x,y,z$ is equal to $w$. It then becomes clear that for each $w$, we can choose $x,y,z$ such that $x=y$ or $x = z$ or $y = z$ and $x,y,z \neq w$.\newline \newline
+(v) False. \newline \newline
+(vi) False. \newline \newline
 \end{document}
