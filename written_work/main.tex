@@ -5,6 +5,7 @@
 \usepackage{mathpazo} % Use the Palatino font
 
 \usepackage{graphicx} % Required for including images
+\graphicspath{{./imgs}}
 
 \usepackage{booktabs} % Required for better horizontal rules in tables
 
@@ -214,8 +215,13 @@ x = 0, y = 1, z = 2
 $$
 That is to say, the expression inside the brackets requires that $x \neq w, y \neq w, z \neq w$. However if we assign $x,y,z$ uniquely, by the pigeonhole principle, it follows that there will exist no such $w$, that satisfies the sentence. \newline \newline
 (ii) False. This sentence can be refuted by considering the fact that if $x, y, z$ are unique, then there will exist no $w$, such that the conjunction of the atomic formulae $E(x,w), E(y,w), E(z,w)$ are satisfied. From the domain of the interpretation, we can deduce that there is no such value of $x$. \newline \newline
-(iii) True. The sentence "for all $y$, there is an $x$, for all $z$, there is a $w$ such that: $x \neq w$, $y \neq w$, and $z \neq w$" \newline \newline
+For the most part of the rest of this question, it will be easier to visualize the interpretation as a graph:
+
+\begin{center}
+    \includegraphics[scale=0.5]{q5-graph.png}
+\end{center}
+(iii) True. The sentence $\forall y \exists x \forall z \exists w (E(x,w) \wedge E(y,w) \wedge E(z,w))$ can be demonstrated to hold true, as for all y, if we choose the $x$, such that $x = y$, then for all values of $z$, it will follow that there will always exist a $w$ that is not already picked on the graph \newline \newline
 (iv) True. In this interpretation, for the sentence to be true, there must exist $x,y,z$ for all $w$, such that none of $x,y,z$ is equal to $w$. It then becomes clear that for each $w$, we can choose $x,y,z$ such that $x=y$ or $x = z$ or $y = z$ and $x,y,z \neq w$.\newline \newline
-(v) False. \newline \newline
+(v) False.  All $x_1$ will have an adjacent $x_2$, and $x_2$ must have an adjacent $w$. All $y_1$ must have an adjacent $y_2$ and $y_2$ must be adjacent to $w$, and the same holds for $z_1$ and $z_2$. As well as that, for all nodes that $z$ can be, $w$ must be adjacent to it. However, if $z$ and $w$ are the same node, then this fails, this does in fact not hold for all possible nodes $z$ can be. \newline \newline
 (vi) False. \newline \newline
 \end{document}
