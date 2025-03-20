@@ -161,6 +161,8 @@ The purpose of Tseitin's Algorithm is to take an arbitrary propositional formula
 \subsection*{Answer} \ \newline
 (i) Logically Valid.
 \begin{proof}
+    In both the antecedent and consequent, $x$ and $y$ are quantified in the same order, so $E(x,y)$ is true in both cases. It also follows that if there exists a $y$, for all values of $z$, such that $E$ holds then it is sufficient that for all $z$, there exists a $y$, such that $E$ holds.
+    Therefore it follows that this sentence is logically valid.
 \end{proof}  \noindent
 (ii) Logically Valid.
 \begin{proof}
@@ -181,6 +183,12 @@ From this we can see, that for all values of x, there in fact is a y, for all z.
 \end{proof} \noindent
 (iv) Logically Valid.
 \begin{proof}
+    Let's re-write the equation by re-arranging the quantifiers as such:
+    \begin{gather*}
+        \forall x \forall y \exists z (E(x,y) \wedge E(y,z)) \to \forall x \forall y \forall z (E(x,y) \wedge E(y,z)) \\ 
+        \equiv \forall y (\forall x E(x,y) \wedge \exists z E(y,z)) \to \forall y (\forall x E(x,y) \vee \forall z E(y,z))
+    \end{gather*}
+    For the antecedent to hold true, we require both $\forall x E(x,y)$ and $\exists z E(y,z)$ to hold true. Therefore if the antecedent is true, then $\forall x E(x,y)$ must be true, which means then that the $\forall x E(x,y)$ in the consequent must also hold true. Therefore this sentence is logically valid.
 \end{proof} \noindent
 
 \section*{Question 5}
