@@ -76,51 +76,65 @@ def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[in
 def get_unit_clause(clause_set: list[list[int]]) -> int | bool:
     for clause in clause_set:
         if len(clause) == 1:
-            return clause[0]
+            for e in clause:
+                break
+            return e
 
     return False
 
 
 def unit_propagate(clause_set: list[list[int]], partial_assignment: list[int]) -> list[list[int]]:
     while unit_clause := get_unit_clause(clause_set):
-        clause_set = [[val for val in clause if val != -1 * unit_clause]
-                      for clause in clause_set if unit_clause not in clause]
+        clause_set = frozenset(frozenset(val for val in clause if val != -1 * unit_clause)
+                      for clause in clause_set if unit_clause not in clause)
         partial_assignment += [unit_clause]
 
     return clause_set, partial_assignment
 
 # Dynamic Largest Individual Sum - I'm not quite sure why, but this decision heuristic seems to work pretty well. Went from 25ms to 10ms for 8queens
 def choose_var(clause_set: list[list[int]]) -> int:
-    flattened = [item for clause in clause_set for item in clause]
     literals = {}
-    for var in flattened:
-        if abs(var) not in literals:
-            literals[abs(var)] = 1
-        else:
-            literals[abs(var)] += 1
+    for clause in clause_set:
+        for var in clause:
+            if abs(var) not in literals:
+                literals[abs(var)] = 1
+            else:
+                literals[abs(var)] += 1
     
     return max(literals, key=literals.get)
 
+memo = {}
 
-def dpll_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None) -> list[int] | bool:
+def dpll_sat_solve(clause_set, partial_assignment: list[int] = None) -> list[int] | bool:
     if partial_assignment is None:
+        clause_set = frozenset(frozenset(clause) for clause in clause_set)
         partial_assignment = []
+        
 
     clause_set,partial_assignment = unit_propagate(clause_set, partial_assignment)
+
+    if clause_set in memo:
+        return memo[clause_set]
+
+
     if not clause_set:
         return partial_assignment
-    elif [] in clause_set:
+    elif any(not clause for clause in clause_set):
+        memo[clause_set] = False
         return False
     else:
         # Clever little heuristic to get the next variable to branch on
         # current_var = clause_set[0][0]
         current_var = choose_var(clause_set)
         # I love the walrus operator
-        if res := dpll_sat_solve([[val for val in clause if val != -current_var] for clause in clause_set if current_var not in clause], partial_assignment + [current_var]):
+        if res := dpll_sat_solve(frozenset(frozenset(val for val in clause if val != -current_var) for clause in clause_set if current_var not in clause), partial_assignment + [current_var]):
+            memo[clause_set] = True
             return res
-        elif res := dpll_sat_solve([[val for val in clause if val != current_var] for clause in clause_set if -current_var not in clause], partial_assignment + [-current_var]):
+        elif res := dpll_sat_solve(frozenset(frozenset(val for val in clause if val != current_var) for clause in clause_set if -current_var not in clause), partial_assignment + [-current_var]):
+            memo[clause_set] = True
             return res
         else:
+            memo[clause_set] = False
             return False
 
 
