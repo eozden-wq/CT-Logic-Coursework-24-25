@@ -55,7 +55,6 @@ def simple_sat_solve(clause_set: list[list[int]]) -> list[int] | bool:
     return False
 
 
-
 def branching_sat_solve(clause_set: list[list[int]], partial_assignment: list[int] = None, current_var=1) -> list[int] | bool:
     if partial_assignment is None:
         partial_assignment = []
@@ -83,15 +82,25 @@ def get_unit_clause(clause_set: list[list[int]]) -> int | bool:
     return False
 
 
-def unit_propagate(clause_set: list[list[int]], partial_assignment: list[int]) -> list[list[int]]:
+def unit_propagate(clause_set: list[list[int]]) -> list[list[int]]:
+    while unit_clause := get_unit_clause(clause_set):
+        clause_set = [[val for val in clause if val != -1 * unit_clause]
+                      for clause in clause_set if unit_clause not in clause]
+
+    return clause_set
+
+
+def unit_propagate_dpll(clause_set: list[list[int]], partial_assignment: list[int]) -> list[list[int]]:
     while unit_clause := get_unit_clause(clause_set):
         clause_set = frozenset(frozenset(val for val in clause if val != -1 * unit_clause)
-                      for clause in clause_set if unit_clause not in clause)
+                               for clause in clause_set if unit_clause not in clause)
         partial_assignment += [unit_clause]
 
     return clause_set, partial_assignment
 
 # Dynamic Largest Individual Sum - I'm not quite sure why, but this decision heuristic seems to work pretty well. Went from 25ms to 10ms for 8queens
+
+
 def choose_var(clause_set: list[list[int]]) -> int:
     literals = {}
     for clause in clause_set:
@@ -100,22 +109,23 @@ def choose_var(clause_set: list[list[int]]) -> int:
                 literals[abs(var)] = 1
             else:
                 literals[abs(var)] += 1
-    
+
     return max(literals, key=literals.get)
+
 
 memo = {}
 
+
 def dpll_sat_solve(clause_set, partial_assignment: list[int] = None) -> list[int] | bool:
-    if partial_assignment is None:
+    if partial_assignment is None or partial_assignment == []:
         clause_set = frozenset(frozenset(clause) for clause in clause_set)
         partial_assignment = []
-        
 
-    clause_set,partial_assignment = unit_propagate(clause_set, partial_assignment)
+    clause_set, partial_assignment = unit_propagate_dpll(
+        clause_set, partial_assignment)
 
     if clause_set in memo:
         return memo[clause_set]
-
 
     if not clause_set:
         return partial_assignment
@@ -147,12 +157,74 @@ def clause_set_satisfied(clause_set, assignment):
     return all(clause_satisfied(clause, assignment) for clause in clause_set)
 
 
+def test():
+    print("Testing load_dimacs")
+    try:
+        dimacs = load_dimacs("tests/sat.txt")
+        assert dimacs == [[1], [1, -1], [-1, -2]]
+        print("Test passed")
+    except:
+        print("Failed to correctly load DIMACS file")
+
+    print("Testing simple_sat_solve")
+    try:
+        sat1 = [[1], [1, -1], [-1, -2]]
+        check = simple_sat_solve(sat1)
+        assert check == [1, -2] or check == [-2, 1]
+        print("Test (SAT) passed")
+    except:
+        print("simple_sat_solve did not work correctly a sat instance")
+
+    try:
+        unsat1 = [[1, -2], [-1, 2], [-1, -2], [1, 2]]
+        check = simple_sat_solve(unsat1)
+        assert (not check)
+        print("Test (UNSAT) passed")
+    except:
+        print("simple_sat_solve did not work correctly an unsat instance")
+
+    print("Testing branching_sat_solve")
+    try:
+        sat1 = [[1], [1, -1], [-1, -2]]
+        check = branching_sat_solve(sat1, [])
+        assert check == [1, -2] or check == [-2, 1]
+        print("Test (SAT) passed")
+    except:
+        print("branching_sat_solve did not work correctly a sat instance")
+
+    try:
+        unsat1 = [[1, -2], [-1, 2], [-1, -2], [1, 2]]
+        check = branching_sat_solve(unsat1, [])
+        assert (not check)
+        print("Test (UNSAT) passed")
+    except:
+        print("branching_sat_solve did not work correctly an unsat instance")
+
+    print("Testing unit_propagate")
+    try:
+        clause_set = [[1], [-1, 2]]
+        check = unit_propagate(clause_set)
+        assert check == []
+        print("Test passed")
+    except:
+        print("unit_propagate did not work correctly")
+
+    print("Testing DPLL")  # Note, this requires load_dimacs to work correctly
+    problem_names = ["tests/sat.txt", "tests/unsat.txt"]
+    for problem in problem_names:
+        try:
+            clause_set = load_dimacs(problem)
+            check = dpll_sat_solve(clause_set, [])
+            if problem == problem_names[1]:
+                assert (not check)
+                print("Test (UNSAT) passed")
+            else:
+                assert check == [1, -2] or check == [-2, 1]
+                print("Test (SAT) passed")
+        except:
+            print("Failed problem " + str(problem))
+    print("Finished tests")
+
+
 if __name__ == "__main__":
-    clause_set = load_dimacs(input("Name of the DIMACS file: "))
-    s = time.time()
-    assignment = dpll_sat_solve(clause_set)
-    e = time.time()
-    print(e-s)
-    print(sorted(assignment) if assignment else False)
-    if assignment:
-        print(clause_set_satisfied(clause_set, assignment))
+    test()
